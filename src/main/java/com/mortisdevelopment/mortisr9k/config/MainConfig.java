@@ -97,9 +97,16 @@ public class MainConfig extends Config {
         List<OriginalCommand> commands = new ArrayList<>();
         ConfigurationSection commandSection = section.getConfigurationSection("commands");
         if (commandSection != null) {
-            for (String ignored : commandSection.getKeys(false)) {
-                String command = commandSection.getString("command");
-                int arguments = commandSection.getInt("arguments");
+            for (String key : commandSection.getKeys(false)) {
+                ConfigurationSection keySection = commandSection.getConfigurationSection(key);
+                if (keySection == null) {
+                    continue;
+                }
+                String command = keySection.getString("command");
+                if (command == null) {
+                    continue;
+                }
+                int arguments = keySection.getInt("arguments");
                 OriginalCommand originalCommand = new OriginalCommand(command, arguments);
                 commands.add(originalCommand);
             }

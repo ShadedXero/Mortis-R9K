@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ReplacerListener implements Listener {
 
@@ -25,33 +26,38 @@ public class ReplacerListener implements Listener {
             return;
         }
         Player player = e.getPlayer();
-        if (!player.hasPermission("r9k.bypass")) {
+        if (player.hasPermission("r9k.bypass")) {
             return;
         }
         String message = MessageUtils.color(e.message());
-        Matcher blacklistMatcher = replacerManager.getSettings().getBlacklistPattern().matcher(message);
-        if (blacklistMatcher.find()) {
-            e.setCancelled(true);
-            if (!replacerManager.getSettings().isNotifyOnBlacklist()) {
+        Pattern blacklistPattern = replacerManager.getSettings().getBlacklistPattern();
+        if (blacklistPattern != null) {
+            Matcher blacklistMatcher = blacklistPattern.matcher(message);
+            if (blacklistMatcher.find()) {
+                e.setCancelled(true);
+                if (!replacerManager.getSettings().isNotifyOnBlacklist()) {
+                    return;
+                }
+                replacerManager.sendMessage(player, "MESSAGE_BLOCKED");
+                for (Player target : Bukkit.getOnlinePlayers()) {
+                    if (target.hasPermission("r9k.notify")) {
+                        target.sendMessage(replacerManager.getMessage("BLACKLIST_NOTIFICATION").replaceText(TextReplacementConfig.builder().match("%player_name%").replacement(player.getName()).build()));
+                    }
+                }
                 return;
             }
-            replacerManager.sendMessage(player, "MESSAGE_BLOCKED");
-            for (Player target : Bukkit.getOnlinePlayers()) {
-                if (target.hasPermission("r9k.notify")) {
-                    target.sendMessage(replacerManager.getMessage("BLACKLIST_NOTIFICATION").replaceText(TextReplacementConfig.builder().match("%player_name%").replacement(player.getName()).build()));
-                }
+        }
+        Pattern pattern = replacerManager.getSettings().getPattern();
+        if (pattern != null) {
+            Matcher matcher = pattern.matcher(message);
+            StringBuffer result = new StringBuffer();
+            while (matcher.find()) {
+                matcher.appendReplacement(result, replacerManager.getSettings().getReplacements().get(matcher.group().toLowerCase()));
             }
-            return;
-        }
+            matcher.appendTail(result);
 
-        Matcher matcher = replacerManager.getSettings().getPattern().matcher(message);
-        StringBuffer result = new StringBuffer();
-        while (matcher.find()) {
-            matcher.appendReplacement(result, replacerManager.getSettings().getReplacements().get(matcher.group().toLowerCase()));
+            e.message(MessageUtils.getComponent(result.toString()));
         }
-        matcher.appendTail(result);
-
-        e.message(MessageUtils.getComponent(result.toString()));
     }
 
     @EventHandler
@@ -60,32 +66,37 @@ public class ReplacerListener implements Listener {
             return;
         }
         Player player = e.getPlayer();
-        if (!player.hasPermission("r9k.bypass")) {
+        if (player.hasPermission("r9k.bypass")) {
             return;
         }
         String message = e.getMessage();
-        Matcher blacklistMatcher = replacerManager.getSettings().getBlacklistPattern().matcher(message);
-        if (blacklistMatcher.find()) {
-            e.setCancelled(true);
-            if (!replacerManager.getSettings().isNotifyOnBlacklist()) {
+        Pattern blacklistPattern = replacerManager.getSettings().getBlacklistPattern();
+        if (blacklistPattern != null) {
+            Matcher blacklistMatcher = blacklistPattern.matcher(message);
+            if (blacklistMatcher.find()) {
+                e.setCancelled(true);
+                if (!replacerManager.getSettings().isNotifyOnBlacklist()) {
+                    return;
+                }
+                replacerManager.sendMessage(player, "MESSAGE_BLOCKED");
+                for (Player target : Bukkit.getOnlinePlayers()) {
+                    if (target.hasPermission("r9k.notify")) {
+                        target.sendMessage(replacerManager.getMessage("BLACKLIST_NOTIFICATION").replaceText(TextReplacementConfig.builder().match("%player_name%").replacement(player.getName()).build()));
+                    }
+                }
                 return;
             }
-            replacerManager.sendMessage(player, "MESSAGE_BLOCKED");
-            for (Player target : Bukkit.getOnlinePlayers()) {
-                if (target.hasPermission("r9k.notify")) {
-                    target.sendMessage(replacerManager.getMessage("BLACKLIST_NOTIFICATION").replaceText(TextReplacementConfig.builder().match("%player_name%").replacement(player.getName()).build()));
-                }
+        }
+        Pattern pattern = replacerManager.getSettings().getPattern();
+        if (pattern != null) {
+            Matcher matcher = pattern.matcher(message);
+            StringBuffer result = new StringBuffer();
+            while (matcher.find()) {
+                matcher.appendReplacement(result, replacerManager.getSettings().getReplacements().get(matcher.group().toLowerCase()));
             }
-            return;
-        }
+            matcher.appendTail(result);
 
-        Matcher matcher = replacerManager.getSettings().getPattern().matcher(message);
-        StringBuffer result = new StringBuffer();
-        while (matcher.find()) {
-            matcher.appendReplacement(result, replacerManager.getSettings().getReplacements().get(matcher.group().toLowerCase()));
+            e.setMessage(result.toString());
         }
-        matcher.appendTail(result);
-
-        e.setMessage(result.toString());
     }
 }

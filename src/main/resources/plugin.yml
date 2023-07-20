@@ -1,4 +1,7 @@
-name: Mortis R9K
+name: MortisR9K
 version: '${project.version}'
 main: com.mortisdevelopment.mortisr9k.MortisR9K
-api-version: '1.18'
+api-version: 1.13
+commands:
+  r9k:
+    description: Mortis R9K Command

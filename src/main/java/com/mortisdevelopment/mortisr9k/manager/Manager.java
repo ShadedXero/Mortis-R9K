@@ -13,8 +13,8 @@ public class Manager {
     private final MortisR9K plugin = MortisR9K.getInstance();
     private ReplacerManager replacerManager;
     private OriginalManager originalManager;
-    private ConfigManager configManager;
     private DataManager dataManager;
+    private ConfigManager configManager;
 
     public Manager() {
         this.configManager = new ConfigManager(this);
@@ -43,19 +43,19 @@ public class Manager {
         this.originalManager = originalManager;
     }
 
-    public ConfigManager getConfigManager() {
-        return configManager;
-    }
-
-    public void setConfigManager(ConfigManager configManager) {
-        this.configManager = configManager;
-    }
-
     public DataManager getDataManager() {
         return dataManager;
     }
 
     public void setDataManager(DataManager dataManager) {
         this.dataManager = dataManager;
+    }
+
+    public ConfigManager getConfigManager() {
+        return configManager;
+    }
+
+    public void setConfigManager(ConfigManager configManager) {
+        this.configManager = configManager;
     }
 }
