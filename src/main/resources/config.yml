@@ -1,0 +1,40 @@
+database:
+  file: data\database
+  username: user
+  password: pass
+
+originality: true  # prevents players sending messages that were already said, uses an H2 database
+caseSensitive: false  # case-sensitive replacement and blacklisting
+notifyOnBlacklist: true # notifies players with the r9k.notify permission when someone says a blacklisted word
+modifyMsg: true  # modifies messages players send using commands such as /msg
+modifyMsgOriginal: false # checks messages players send with commands for originality
+precisionReplace: true  # only replaces words when they are exactly what is set in replacements Ex: smile can turn into smite if set to false and mile is set to turn into mite
+messages:
+  reload: "R9K config reloaded."
+  purge: "R9K messages purged."
+  no-permission: "You do not have permission to use this R9K command."
+  message-blocked: "Your message contained a blacklisted word and was blocked."
+  blacklist-notification: "A message from %player_name% was blocked due to a blacklisted word."
+  unoriginal-notification: "This message was unoriginal and blocked"
+
+#commands-on-unoriginal:
+#  - "give %player_name% apple 1"
+
+commands:
+  EXAMPLE_COMMAND:
+    command: /msg
+    arguments: 1
+  EXAMPLE_COMMAND_2:
+    command: /r
+    arguments: 0
+  EXAMPLE_COMMAND_3:
+    command: /tell
+    arguments: 1
+
+replacements:
+  hello: "hey"
+  bye: "see you"
+
+blacklist:
+  - "forbiddenWord1"
+  - "forbiddenWord2"

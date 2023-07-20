@@ -1,0 +1,4 @@
+name: Mortis R9K
+version: '${project.version}'
+main: com.mortisdevelopment.mortisr9k.MortisR9K
+api-version: '1.18'
