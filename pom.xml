@@ -6,7 +6,7 @@
 
     <groupId>com.mortisdevelopment</groupId>
     <artifactId>MortisR9K</artifactId>
-    <version>1.0</version>
+    <version>1.3</version>
     <packaging>jar</packaging>
 
     <name>Mortis R9K</name>
@@ -40,8 +40,8 @@
                         <configuration>
                             <relocations>
                                 <relocation>
-                                    <pattern>com.h2database</pattern>
-                                    <shadedPattern>com.mortisdevelopment.mortisr9k.h2database</shadedPattern>
+                                    <pattern>org.h2</pattern>
+                                    <shadedPattern>com.mortisdevelopment.mortisr9k.h2</shadedPattern>
                                 </relocation>
                             </relocations>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
